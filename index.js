@@ -5,14 +5,13 @@ function start() {
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
   ctx.font = '50px Arial';
-  ctx.fillStyle = "red";
+  ctx.fillStyle = 'red';
   ctx.fillText('Hello World', 100, 100);
+
   gl = initWebGL(glElem);
   if (gl) {
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.TEXTURING);
     gl.enable(gl.TEXTURE_2D);
-    gl.enable(gl.DEPTH_TEST);
 
     var texture = gl.createTexture();
     gl.activeTexture(gl.TEXTURE0);

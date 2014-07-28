@@ -1,30 +1,39 @@
 var gl;
 
 function start() {
-  var canvas = document.getElementById("glcanvas");
-
-  gl = initWebGL(canvas);
-
-
+  var glElem = document.getElementById('gl');
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  ctx.font = '50px Arial';
+  ctx.fillStyle = "red";
+  ctx.fillText('Hello World', 100, 100);
+  gl = initWebGL(glElem);
   if (gl) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.enable(gl.TEXTURING);
+    gl.enable(gl.TEXTURE_2D);
     gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LEQUAL);
-    gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-    gl.viewport(0, 0, canvas.width, canvas.height);
+
+    var texture = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
+    gl.generateMipmap(gl.TEXTURE_2D);
+
+    gl.viewport(0, 0, glElem.width, glElem.height);
   }
 }
 
-function initWebGL(canvas) {
+function initWebGL(elem) {
   gl = null;
 
   try {
-    gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    gl = elem.getContext('webgl') || elem.getContext('experimental-webgl');
+  } catch(e) {
   }
-  catch(e) {}
 
   if (!gl) {
-    alert("Unable to initialize WebGL. Your browser may not support it.");
+    alert('Unable to initialize WebGL. Your browser may not support it.');
     gl = null;
   }
 
